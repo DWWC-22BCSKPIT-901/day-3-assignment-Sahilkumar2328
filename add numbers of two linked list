@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    ListNode* dummyHead = new ListNode(0);
+    ListNode* current = dummyHead;
+    int carry = 0;
+
+    while (l1 != nullptr || l2 != nullptr || carry != 0) {
+        int sum = carry;
+        if (l1 != nullptr) {
+            sum += l1->val;
+            l1 = l1->next;
+        }
+        if (l2 != nullptr) {
+            sum += l2->val;
+            l2 = l2->next;
+        }
+        carry = sum / 10;
+        current->next = new ListNode(sum % 10);
+        current = current->next;
+    }
+
+    return dummyHead->next;
+}
+
+ListNode* createListFromInput(int size) {
+    ListNode* head = nullptr;
+    ListNode* tail = nullptr;
+    for (int i = 0; i < size; ++i) {
+        int val;
+        cin >> val;
+        ListNode* newNode = new ListNode(val);
+        if (head == nullptr) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = tail->next;
+        }
+    }
+    return head;
+}
+void printList(ListNode* head) {
+    while (head != nullptr) {
+        cout << head->val;
+        if (head->next != nullptr) cout << " -> ";
+        head = head->next;
+    }
+    cout << endl;
+}
+int main() {
+    int size1, size2;
+    cout << "Enter the size of the first list: ";
+    cin >> size1;
+    cout << "Enter the elements of the first list: ";
+    ListNode* l1 = createListFromInput(size1);
+    cout << "Enter the size of the second list: ";
+    cin >> size2;
+    cout << "Enter the elements of the second list: ";
+    ListNode* l2 = createListFromInput(size2);
+    ListNode* result = addTwoNumbers(l1, l2);
+    cout << "Resultant list: ";
+    printList(result);
+    return 0;
+}
